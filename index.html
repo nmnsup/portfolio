@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Naman Supekar — Builder Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@300;400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0b0e;
+    --surface: #111116;
+    --border: #1e1e28;
+    --border-light: #2a2a38;
+    --text: #e8e6e0;
+    --muted: #6b6a75;
+    --accent: #c8ff57;
+    --accent2: #ff7a45;
+    --accent3: #7b8cff;
+    --tag-bg: #16161f;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.5;
+  }
+
+  .container { max-width: 860px; margin: 0 auto; padding: 0 28px; position: relative; z-index: 1; }
+
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px 0 24px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo { font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--accent); letter-spacing: 0.04em; }
+
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--muted); text-decoration: none; letter-spacing: 0.06em; text-transform: uppercase; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--text); }
+
+  .hero { padding: 80px 0 72px; border-bottom: 1px solid var(--border); animation: fadeUp 0.6s ease both; }
+
+  .hero-label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--accent); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+  .hero-label::before { content: ''; display: inline-block; width: 24px; height: 1px; background: var(--accent); }
+
+  h1 { font-family: 'DM Serif Display', serif; font-size: clamp(44px, 7vw, 72px); line-height: 1.05; font-weight: 400; letter-spacing: -0.02em; margin-bottom: 28px; color: var(--text); }
+  h1 em { font-style: italic; color: var(--accent); }
+
+  .hero-bio { font-size: 17px; color: var(--muted); max-width: 560px; line-height: 1.75; margin-bottom: 40px; }
+  .hero-bio strong { color: var(--text); font-weight: 500; }
+
+  .hero-links { display: flex; gap: 16px; flex-wrap: wrap; }
+
+  .btn { font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; padding: 11px 22px; border-radius: 3px; text-decoration: none; transition: all 0.2s; }
+  .btn-primary { background: var(--accent); color: #0b0b0e; font-weight: 500; }
+  .btn-primary:hover { background: #d6ff7a; }
+  .btn-ghost { border: 1px solid var(--border-light); color: var(--muted); }
+  .btn-ghost:hover { border-color: var(--text); color: var(--text); }
+
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 4px; margin: 60px 0 0; overflow: hidden; }
+  .stat { background: var(--surface); padding: 24px 28px; }
+  .stat-number { font-family: 'DM Serif Display', serif; font-size: 36px; color: var(--text); line-height: 1; margin-bottom: 6px; }
+  .stat-number span { color: var(--accent); }
+  .stat-label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+
+  .section { padding: 72px 0; border-bottom: 1px solid var(--border); }
+
+  .section-header { display: flex; align-items: baseline; gap: 16px; margin-bottom: 48px; }
+  .section-label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+  h2 { font-family: 'DM Serif Display', serif; font-size: 32px; font-weight: 400; color: var(--text); }
+
+  .projects { display: flex; flex-direction: column; gap: 12px; }
+
+  .project-card { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 36px 40px; transition: border-color 0.2s; position: relative; overflow: hidden; }
+  .project-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; opacity: 0; transition: opacity 0.2s; }
+  .card-knot::before { background: var(--accent); }
+  .card-report::before { background: var(--accent2); }
+  .card-asa::before { background: var(--accent3); }
+  .project-card:hover { border-color: var(--border-light); }
+  .project-card:hover::before { opacity: 1; }
+
+  .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; gap: 16px; }
+  .card-meta { flex: 1; }
+  .card-index { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 0.08em; margin-bottom: 8px; }
+  .card-title { font-family: 'DM Serif Display', serif; font-size: 26px; font-weight: 400; color: var(--text); margin-bottom: 4px; }
+  .card-subtitle { font-size: 13px; color: var(--muted); font-family: 'IBM Plex Mono', monospace; }
+
+  .card-status { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; padding: 5px 10px; border-radius: 2px; white-space: nowrap; flex-shrink: 0; }
+  .status-live { background: rgba(200,255,87,0.1); color: var(--accent); border: 1px solid rgba(200,255,87,0.2); }
+  .status-concept { background: rgba(255,122,69,0.1); color: var(--accent2); border: 1px solid rgba(255,122,69,0.2); }
+  .status-research { background: rgba(123,140,255,0.1); color: var(--accent3); border: 1px solid rgba(123,140,255,0.2); }
+
+  .card-body { font-size: 15px; color: #a09fa8; line-height: 1.75; margin-bottom: 24px; max-width: 640px; }
+
+  .card-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+  .tag { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; padding: 4px 10px; border-radius: 2px; background: var(--tag-bg); border: 1px solid var(--border-light); color: var(--muted); }
+
+  .card-highlights { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .highlight { display: flex; gap: 10px; align-items: flex-start; }
+  .highlight-dot { width: 6px; height: 6px; border-radius: 50%; margin-top: 8px; flex-shrink: 0; }
+  .dot-accent { background: var(--accent); }
+  .dot-accent2 { background: var(--accent2); }
+  .dot-accent3 { background: var(--accent3); }
+  .highlight-text { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .highlight-text strong { color: var(--text); font-weight: 500; }
+
+  .card-link { display: inline-flex; align-items: center; gap: 8px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); text-decoration: none; margin-top: 20px; transition: color 0.2s; }
+  .card-link:hover { color: var(--text); }
+  .card-link svg { transition: transform 0.2s; }
+  .card-link:hover svg { transform: translate(2px, -2px); }
+
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .about-block { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 28px 32px; }
+  .about-block-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+  .about-block p { font-size: 14px; color: #a09fa8; line-height: 1.7; }
+  .about-block p + p { margin-top: 10px; }
+
+  .cert-list { list-style: none; }
+  .cert-list li { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; color: #a09fa8; }
+  .cert-list li:last-child { border-bottom: none; }
+  .cert-list li::before { content: '✓'; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--accent); }
+
+  footer { padding: 48px 0; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .footer-note { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 0.05em; }
+  .footer-links { display: flex; gap: 20px; }
+  .footer-links a { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--text); }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+  @media (max-width: 640px) {
+    .stats { grid-template-columns: 1fr; }
+    .about-grid { grid-template-columns: 1fr; }
+    .card-top { flex-direction: column; }
+    .project-card { padding: 28px 24px; }
+    footer { flex-direction: column; align-items: flex-start; }
+    nav { flex-direction: column; align-items: flex-start; gap: 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <nav>
+    <div class="nav-logo">naman.supekar</div>
+    <ul class="nav-links">
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#background">Background</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-label">Builder — Delhi, India</div>
+    <h1>Product builder.<br><em>No engineering degree.</em><br>Ships anyway.</h1>
+    <p class="hero-bio">
+      Final-year BBA student (Finance & Data Analytics). I build at the intersection of AI and product — mostly alone, mostly with tools that didn't exist two years ago. Three products in various stages. One live. One designed end-to-end. One researched deeply enough to know whether to build it.
+    </p>
+    <div class="hero-links">
+      <a href="https://tryknot.netlify.app/" target="_blank" class="btn btn-primary">→ See Knot Live</a>
+      <a href="https://x.com/nmnsup" target="_blank" class="btn btn-ghost">X / @nmnsup</a>
+    </div>
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-number">3<span>×</span></div>
+        <div class="stat-label">Products Built or Designed</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">29<span>+</span></div>
+        <div class="stat-label">Waitlist Signups — Knot</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">0<span>→</span></div>
+        <div class="stat-label">Prior Engineering Background</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="projects">
+    <div class="section-header">
+      <span class="section-label">01 /</span>
+      <h2>Projects</h2>
+    </div>
+
+    <div class="projects">
+
+      <div class="project-card card-knot">
+        <div class="card-top">
+          <div class="card-meta">
+            <div class="card-index">Project 01</div>
+            <div class="card-title">Knot</div>
+            <div class="card-subtitle">AI Second Brain — Browser Extension</div>
+          </div>
+          <span class="card-status status-live">● Live</span>
+        </div>
+        <p class="card-body">
+          Most people lose half of what they read online. Knot fixes that. It's a browser extension that captures ideas, articles, and thoughts as you browse — then surfaces them later using AI, so the thing you read three weeks ago actually informs what you're thinking today. Built entirely with AI tools, no engineering background. Has a live landing page, a real waitlist, a Substack article, and an X thread documenting the build in public.
+        </p>
+        <div class="card-tags">
+          <span class="tag">Browser Extension</span>
+          <span class="tag">AI / LLM</span>
+          <span class="tag">Personal Knowledge</span>
+          <span class="tag">Vibe-coded</span>
+          <span class="tag">Solo Build</span>
+        </div>
+        <div class="card-highlights">
+          <div class="highlight">
+            <div class="highlight-dot dot-accent"></div>
+            <div class="highlight-text"><strong>Live landing page</strong> with Formspree waitlist at tryknot.netlify.app</div>
+          </div>
+          <div class="highlight">
+            <div class="highlight-dot dot-accent"></div>
+            <div class="highlight-text"><strong>29+ real waitlist signups</strong> from organic discovery</div>
+          </div>
+          <div class="highlight">
+            <div class="highlight-dot dot-accent"></div>
+            <div class="highlight-text"><strong>Full competitive analysis</strong> across 8+ second-brain tools</div>
+          </div>
+          <div class="highlight">
+            <div class="highlight-dot dot-accent"></div>
+            <div class="highlight-text"><strong>User research</strong> — Reddit outreach and interview synthesis</div>
+          </div>
+          <div class="highlight">
+            <div class="highlight-dot dot-accent"></div>
+            <div class="highlight-text"><strong>Build-in-public</strong> on Substack and @nmnsup on X</div>
+          </div>
+          <div class="highlight">
+            <div class="highlight-dot dot-accent"></div>
+            <div class="highlight-text"><strong>Chrome Web Store</strong> launch in progress</div>
+          </div>
+        </div>
+        <a href="https://tryknot.netlify.app/" target="_blank" class="card-link">
+          Visit tryknot.netlify.app
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 10L10 2M10 2H4M10 2V8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </a>
+      </div>
+
+      <div class="project-card card-report">
+        <div class="card-top">
+          <div class="card-meta">
+            <div class="card-index">Project 02</div>
+            <div class="card-title">ReportPilot</div>
+            <div class="card-subtitle">Vertical SaaS — Digital Marketing Agencies</div>
+          </div>
+          <span class="card-status status-concept">◎ Designed</span>
+        </div>
+        <p class="card-body">
+          Digital marketing agencies spend every Friday manually writing client reports — pulling numbers from Google Ads, Meta, and GA4, writing the narrative, formatting it, sending it. Every client. Every week. By hand. Every existing tool shows them the data. None of them write the words. ReportPilot connects to their ad accounts, writes the full report in the agency's own voice — what changed, why, what to do next — and emails it to the client automatically. The agency wakes up Saturday. Their clients already have their reports. Nobody worked Friday evening.
+        </p>
+        <div class="card-tags">
+          <span class="tag">Vertical SaaS</span>
+          <span class="tag">Marketing Tech</span>
+          <span class="tag">LLM Automation</span>
+          <span class="tag">API Integration</span>
+          <span class="tag">B2B</span>
+        </div>
+        <div class="card-highlights">
+          <div class="highlight">
+            <div class="highlight-dot dot-accent2"></div>
+            <div class="highlight-text"><strong>Problem validated</strong> through agency interviews and community research</div>
+          </div>
+          <div class="highlight">
+            <div class="highlight-dot dot-accent2"></div>
+            <div class="highlight-text"><strong>Integrations mapped</strong> — Google Ads, Meta, GA4 APIs</div>
+          </div>
+          <div class="highlight">
+            <div class="highlight-dot dot-accent2"></div>
+            <div class="highlight-text"><strong>Voice matching</strong> — reports generated in the agency's own tone</div>
+          </div>
+          <div class="highlight">
+            <div class="highlight-dot dot-accent2"></div>
+            <div class="highlight-text"><strong>GTM outlined</strong> — agency Slack groups, ProductHunt, cold outreach</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card card-asa">
+        <div class="card-top">
+          <div class="card-meta">
+            <div class="card-index">Project 03</div>
+            <div class="card-title">ASA — Market Research</div>
+            <div class="card-subtitle">AI Observability Startup — Deep Research Sprint</div>
+          </div>
+          <span class="card-status status-research">◈ Research</span>
+        </div>
+        <p class="card-body">
+          ASA (AI System Avatar) is a conversational observability layer for AI agents. Instead of reading dashboards or log files, engineers ask in plain English: "Why did my agent fail last night?" and get a human-readable answer. Before building anything, I ran a structured 9-part research sprint covering problem validation, competitive landscape across 10 tools, market sizing, regulatory implications, customer segmentation, GTM strategy, and a full risk analysis.
+        </p>
+        <div class="card-tags">
+          <span class="tag">AI Infrastructure</span>
+          <span class="tag">LLMOps</span>
+          <span class="tag">Market Research</span>
+          <span class="tag">Startup Strategy</span>
+          <span class="tag">B2B SaaS</span>
+        </div>
+        <div class="card-highlights">
+          <div class="highlight">
+            <div class="highlight-dot dot-accent3"></div>
+            <div class="highlight-text"><strong>10-tool competitive teardown</strong> — LangSmith, Arize, Helicone, Langfuse and more</div>
+          </div>
+          <div class="highlight">
+            <div class="highlight-dot dot-accent3"></div>
+            <div class="highlight-text"><strong>Market sizing</strong> across LLMOps, AIOps, and agentic AI</div>
+          </div>
+          <div class="highlight">
+            <div class="highlight-dot dot-accent3"></div>
+            <div class="highlight-text"><strong>EU AI Act analysis</strong> and regulatory implications for observability</div>
+          </div>
+          <div class="highlight">
+            <div class="highlight-dot dot-accent3"></div>
+            <div class="highlight-text"><strong>Full SWOT</strong> with viability score and reasoning</div>
+          </div>
+          <div class="highlight">
+            <div class="highlight-dot dot-accent3"></div>
+            <div class="highlight-text"><strong>Customer segmentation</strong> and WTP analysis across 4 buyer profiles</div>
+          </div>
+          <div class="highlight">
+            <div class="highlight-dot dot-accent3"></div>
+            <div class="highlight-text"><strong>Moat strategy</strong> — defensibility against OpenAI, Anthropic, NVIDIA</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section" id="background">
+    <div class="section-header">
+      <span class="section-label">02 /</span>
+      <h2>Background</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-block">
+        <div class="about-block-label">Education</div>
+        <p>Final-year BBA — Finance & Data Analytics</p>
+        <p>Bharati Vidyapeeth's College of Engineering, Delhi</p>
+        <p style="margin-top: 14px; font-size: 13px; color: #555468;">Non-engineering background. Built everything using AI tools — which is kind of the point.</p>
+      </div>
+      <div class="about-block">
+        <div class="about-block-label">Certifications</div>
+        <ul class="cert-list">
+          <li>AI for Product Management — Pendo</li>
+          <li>Google Cloud AI Fundamentals</li>
+          <li>Anthropic AI Fluency: Frameworks & Foundations</li>
+        </ul>
+      </div>
+      <div class="about-block">
+        <div class="about-block-label">What I Can Actually Do</div>
+        <p>Product research and competitive analysis. Writing specs and PRDs. Talking to users. Building landing pages and browser extensions with AI tools. Thinking through GTM from first principles.</p>
+        <p>Not a developer by training. A product person who ships.</p>
+      </div>
+      <div class="about-block">
+        <div class="about-block-label">Other Activity</div>
+        <p>Applied to YC Work at a Startup program. Applied to YC Startup School India (April 2025, Bengaluru). Building in public on X (@nmnsup). Writing on Substack about Knot's product development journey.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer id="contact">
+    <div class="footer-note">© 2025 Naman Supekar · Delhi, India</div>
+    <div class="footer-links">
+      <a href="https://tryknot.netlify.app/" target="_blank">Knot</a>
+      <a href="https://x.com/nmnsup" target="_blank">@nmnsup</a>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>
