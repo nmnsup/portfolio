@@ -1,390 +1,340 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Naman Supekar — Builder Portfolio</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Naman — Builder. Thinker. Observer.</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@300;400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0b0b0e;
-    --surface: #111116;
-    --border: #1e1e28;
-    --border-light: #2a2a38;
-    --text: #e8e6e0;
-    --muted: #6b6a75;
-    --accent: #c8ff57;
-    --accent2: #ff7a45;
-    --accent3: #7b8cff;
-    --tag-bg: #16161f;
-  }
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Instrument Sans', sans-serif;
-    font-size: 16px;
-    line-height: 1.7;
-    min-height: 100vh;
-  }
-
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.5;
-  }
-
-  .container { max-width: 860px; margin: 0 auto; padding: 0 28px; position: relative; z-index: 1; }
-
-  nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 28px 0 24px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .nav-logo { font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--accent); letter-spacing: 0.04em; }
-
-  .nav-links { display: flex; gap: 28px; list-style: none; }
-  .nav-links a { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--muted); text-decoration: none; letter-spacing: 0.06em; text-transform: uppercase; transition: color 0.2s; }
-  .nav-links a:hover { color: var(--text); }
-
-  .hero { padding: 80px 0 72px; border-bottom: 1px solid var(--border); animation: fadeUp 0.6s ease both; }
-
-  .hero-label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--accent); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
-  .hero-label::before { content: ''; display: inline-block; width: 24px; height: 1px; background: var(--accent); }
-
-  h1 { font-family: 'DM Serif Display', serif; font-size: clamp(44px, 7vw, 72px); line-height: 1.05; font-weight: 400; letter-spacing: -0.02em; margin-bottom: 28px; color: var(--text); }
-  h1 em { font-style: italic; color: var(--accent); }
-
-  .hero-bio { font-size: 17px; color: var(--muted); max-width: 560px; line-height: 1.75; margin-bottom: 40px; }
-  .hero-bio strong { color: var(--text); font-weight: 500; }
-
-  .hero-links { display: flex; gap: 16px; flex-wrap: wrap; }
-
-  .btn { font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; padding: 11px 22px; border-radius: 3px; text-decoration: none; transition: all 0.2s; }
-  .btn-primary { background: var(--accent); color: #0b0b0e; font-weight: 500; }
-  .btn-primary:hover { background: #d6ff7a; }
-  .btn-ghost { border: 1px solid var(--border-light); color: var(--muted); }
-  .btn-ghost:hover { border-color: var(--text); color: var(--text); }
-
-  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 4px; margin: 60px 0 0; overflow: hidden; }
-  .stat { background: var(--surface); padding: 24px 28px; }
-  .stat-number { font-family: 'DM Serif Display', serif; font-size: 36px; color: var(--text); line-height: 1; margin-bottom: 6px; }
-  .stat-number span { color: var(--accent); }
-  .stat-label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
-
-  .section { padding: 72px 0; border-bottom: 1px solid var(--border); }
-
-  .section-header { display: flex; align-items: baseline; gap: 16px; margin-bottom: 48px; }
-  .section-label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
-  h2 { font-family: 'DM Serif Display', serif; font-size: 32px; font-weight: 400; color: var(--text); }
-
-  .projects { display: flex; flex-direction: column; gap: 12px; }
-
-  .project-card { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 36px 40px; transition: border-color 0.2s; position: relative; overflow: hidden; }
-  .project-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; opacity: 0; transition: opacity 0.2s; }
-  .card-knot::before { background: var(--accent); }
-  .card-report::before { background: var(--accent2); }
-  .card-asa::before { background: var(--accent3); }
-  .project-card:hover { border-color: var(--border-light); }
-  .project-card:hover::before { opacity: 1; }
-
-  .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; gap: 16px; }
-  .card-meta { flex: 1; }
-  .card-index { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 0.08em; margin-bottom: 8px; }
-  .card-title { font-family: 'DM Serif Display', serif; font-size: 26px; font-weight: 400; color: var(--text); margin-bottom: 4px; }
-  .card-subtitle { font-size: 13px; color: var(--muted); font-family: 'IBM Plex Mono', monospace; }
-
-  .card-status { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; padding: 5px 10px; border-radius: 2px; white-space: nowrap; flex-shrink: 0; }
-  .status-live { background: rgba(200,255,87,0.1); color: var(--accent); border: 1px solid rgba(200,255,87,0.2); }
-  .status-concept { background: rgba(255,122,69,0.1); color: var(--accent2); border: 1px solid rgba(255,122,69,0.2); }
-  .status-research { background: rgba(123,140,255,0.1); color: var(--accent3); border: 1px solid rgba(123,140,255,0.2); }
-
-  .card-body { font-size: 15px; color: #a09fa8; line-height: 1.75; margin-bottom: 24px; max-width: 640px; }
-
-  .card-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
-  .tag { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; padding: 4px 10px; border-radius: 2px; background: var(--tag-bg); border: 1px solid var(--border-light); color: var(--muted); }
-
-  .card-highlights { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; padding-top: 24px; border-top: 1px solid var(--border); }
-  .highlight { display: flex; gap: 10px; align-items: flex-start; }
-  .highlight-dot { width: 6px; height: 6px; border-radius: 50%; margin-top: 8px; flex-shrink: 0; }
-  .dot-accent { background: var(--accent); }
-  .dot-accent2 { background: var(--accent2); }
-  .dot-accent3 { background: var(--accent3); }
-  .highlight-text { font-size: 13px; color: var(--muted); line-height: 1.5; }
-  .highlight-text strong { color: var(--text); font-weight: 500; }
-
-  .card-link { display: inline-flex; align-items: center; gap: 8px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); text-decoration: none; margin-top: 20px; transition: color 0.2s; }
-  .card-link:hover { color: var(--text); }
-  .card-link svg { transition: transform 0.2s; }
-  .card-link:hover svg { transform: translate(2px, -2px); }
-
-  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .about-block { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 28px 32px; }
-  .about-block-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
-  .about-block p { font-size: 14px; color: #a09fa8; line-height: 1.7; }
-  .about-block p + p { margin-top: 10px; }
-
-  .cert-list { list-style: none; }
-  .cert-list li { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; color: #a09fa8; }
-  .cert-list li:last-child { border-bottom: none; }
-  .cert-list li::before { content: '✓'; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--accent); }
-
-  footer { padding: 48px 0; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
-  .footer-note { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 0.05em; }
-  .footer-links { display: flex; gap: 20px; }
-  .footer-links a { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
-  .footer-links a:hover { color: var(--text); }
-
-  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-
-  @media (max-width: 640px) {
-    .stats { grid-template-columns: 1fr; }
-    .about-grid { grid-template-columns: 1fr; }
-    .card-top { flex-direction: column; }
-    .project-card { padding: 28px 24px; }
-    footer { flex-direction: column; align-items: flex-start; }
-    nav { flex-direction: column; align-items: flex-start; gap: 16px; }
-  }
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#000;--fg:#EAE6DF;--dim:rgba(234,230,223,0.45);
+  --muted:rgba(234,230,223,0.18);--orange:#E8691A;--blue:#4ABFE0;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --mono:'JetBrains Mono',monospace;
+  --ar:rgba(255,45,32,0.38);--ab:rgba(74,191,224,0.38);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--fg);font-family:var(--serif);overflow-x:hidden;cursor:none}
+a{color:inherit;text-decoration:none}
+#cur{position:fixed;width:7px;height:7px;background:var(--fg);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:difference}
+#bh{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:0}
+#ct{position:relative;z-index:10}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:1.8rem 3.5rem;display:flex;justify-content:space-between;align-items:center;transition:background .4s,border-color .4s}
+nav.scrolled{background:rgba(0,0,0,0.78);backdrop-filter:blur(16px);border-bottom:1px solid rgba(234,230,223,0.06)}
+.nav-id{font-family:var(--mono);font-size:.62rem;color:var(--muted);letter-spacing:.12em;text-transform:uppercase}
+.nav-r{display:flex;gap:2.5rem;list-style:none}
+.nav-r a{font-family:var(--mono);font-size:.62rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;transition:color .3s}
+.nav-r a:hover{color:var(--fg)}
+.hero{height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 3.5rem 5rem;pointer-events:none}
+.h-name{font-size:clamp(7rem,16vw,15rem);font-style:italic;font-weight:300;line-height:.85;letter-spacing:-.035em;text-shadow:-2px 0 0 var(--ar),2px 0 0 var(--ab);opacity:0;transform:translateY(55px);animation:rise 1.3s cubic-bezier(.16,1,.3,1) .25s forwards}
+.h-sub{font-family:var(--mono);font-size:.68rem;color:var(--dim);letter-spacing:.22em;text-transform:uppercase;margin-top:2.2rem;opacity:0;animation:rise 1s ease .85s forwards}
+.bh-z{height:100vh;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.bh-q{font-size:clamp(1.5rem,3.2vw,2.6rem);font-style:italic;font-weight:300;text-align:center;line-height:1.45;max-width:640px;padding:0 2rem;text-shadow:-1px 0 0 var(--ar),1px 0 0 var(--ab);opacity:0;transform:translateY(22px);transition:opacity 1.3s ease,transform 1.3s ease}
+.bh-q.in{opacity:1;transform:translateY(0)}
+.sec{padding:9rem 3.5rem;max-width:1060px}
+.sw{padding:9rem 3.5rem}
+.sl{font-family:var(--mono);font-size:.58rem;color:var(--muted);letter-spacing:.32em;text-transform:uppercase;margin-bottom:4.5rem;display:flex;align-items:center;gap:1.2rem}
+.sl::after{content:'';width:36px;height:1px;background:rgba(234,230,223,0.1)}
+.ab-g{display:grid;grid-template-columns:1.5fr 1fr;gap:6rem;align-items:start}
+.ab-h{font-size:clamp(1.8rem,3.5vw,3rem);font-style:italic;font-weight:300;line-height:1.2;margin-bottom:2rem}
+.ab-b{font-size:1.02rem;font-weight:400;color:var(--dim);line-height:2.1}
+.ab-b p+p{margin-top:1.4rem}
+.fact{padding:2rem 0;border-top:1px solid rgba(234,230,223,0.07)}
+.fn{font-size:3rem;font-style:italic;font-weight:300;line-height:1;margin-bottom:.5rem;text-shadow:-1px 0 var(--ar),1px 0 var(--ab)}
+.fl{font-family:var(--mono);font-size:.6rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;line-height:1.7}
+.pr{display:grid;grid-template-columns:4.5rem 1fr;gap:2.5rem;align-items:start;padding:3.5rem 0;border-top:1px solid rgba(234,230,223,0.07);opacity:0;transform:translateY(18px);transition:opacity .75s ease,transform .75s ease}
+.pr.in{opacity:1;transform:translateY(0)}
+.pr:hover .pt{text-shadow:-1.5px 0 var(--ar),1.5px 0 var(--ab)}
+.pn{font-size:2.2rem;font-style:italic;font-weight:300;color:rgba(234,230,223,0.12);line-height:1;padding-top:.5rem}
+.ps{font-family:var(--mono);font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:.8rem;display:flex;align-items:center;gap:.55rem}
+.dot{width:4px;height:4px;border-radius:50%;display:inline-block;flex-shrink:0}
+.dl{background:var(--blue);box-shadow:0 0 5px var(--blue)}
+.db{background:rgba(234,230,223,.35)}
+.dw{background:var(--orange);box-shadow:0 0 5px var(--orange)}
+.dr{background:rgba(234,230,223,.2)}
+.pt{font-size:clamp(2.2rem,4vw,3.4rem);font-style:italic;font-weight:300;line-height:1;margin-bottom:1rem;transition:text-shadow .3s}
+.pd{font-size:.95rem;font-weight:400;color:var(--dim);line-height:2;max-width:580px;margin-bottom:1.1rem}
+.pl{font-family:var(--mono);font-size:.6rem;color:var(--blue);letter-spacing:.1em;transition:color .3s}
+.pl:hover{color:var(--fg)}
+.pl::after{content:' →'}
+.th-g{display:grid;grid-template-columns:repeat(3,1fr);gap:0;padding:0 3.5rem;max-width:1060px}
+.td{padding:2.8rem 3rem 2.8rem 0;border-top:1px solid rgba(234,230,223,0.07);opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
+.td.in{opacity:1;transform:translateY(0)}
+.tn{font-size:clamp(1.3rem,2vw,1.8rem);font-style:italic;font-weight:300;line-height:1.1;margin-bottom:.65rem}
+.tnote{font-family:var(--mono);font-size:.58rem;color:var(--muted);letter-spacing:.06em;line-height:1.75}
+.wi{border-top:1px solid rgba(234,230,223,0.07)}
+.wi a{display:flex;justify-content:space-between;align-items:center;padding:2.2rem 0;gap:2rem}
+.wt{font-size:clamp(1.05rem,2vw,1.45rem);font-style:italic;font-weight:300;color:rgba(234,230,223,.68);line-height:1.35;transition:color .3s,text-shadow .3s}
+.wi a:hover .wt{color:var(--fg);text-shadow:-1px 0 var(--ar),1px 0 var(--ab)}
+.wa{font-family:var(--mono);font-size:.6rem;color:var(--muted);flex-shrink:0;transition:transform .3s,color .3s}
+.wi a:hover .wa{transform:translateX(5px);color:var(--dim)}
+.contact{min-height:75vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:6rem 3rem}
+.cp{font-family:var(--mono);font-size:.58rem;color:var(--muted);letter-spacing:.32em;text-transform:uppercase;margin-bottom:2rem}
+.ch{font-size:clamp(4rem,10vw,9.5rem);font-style:italic;font-weight:300;line-height:.88;letter-spacing:-.02em;margin-bottom:2.5rem;text-shadow:-2.5px 0 var(--ar),2.5px 0 var(--ab)}
+.cn{font-size:.95rem;font-weight:400;color:var(--dim);max-width:380px;line-height:2.1;margin-bottom:2.8rem}
+.ce{font-style:italic;font-size:1.1rem;color:var(--dim);border-bottom:1px solid rgba(234,230,223,.15);padding-bottom:4px;letter-spacing:.04em;transition:color .3s,border-color .3s;display:inline-block;margin-bottom:2.5rem}
+.ce:hover{color:var(--fg);border-color:rgba(234,230,223,.55)}
+.cs{display:flex;gap:2.5rem;list-style:none}
+.cs a{font-family:var(--mono);font-size:.6rem;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;transition:color .3s}
+.cs a:hover{color:var(--dim)}
+footer{padding:1.8rem 3.5rem;border-top:1px solid rgba(234,230,223,.04);display:flex;justify-content:space-between;align-items:center}
+footer .fll{font-family:var(--mono);font-size:.58rem;color:var(--muted);letter-spacing:.06em}
+footer .frr{font-style:italic;font-size:.85rem;color:rgba(234,230,223,.15)}
+.rv{opacity:0;transform:translateY(20px);transition:opacity .9s ease,transform .9s ease}
+.rv.in{opacity:1;transform:translateY(0)}
+@keyframes rise{to{opacity:1;transform:translateY(0)}}
+@media(max-width:760px){
+  nav{padding:1.2rem 1.5rem}.nav-r{gap:1.5rem}
+  .hero,.sec,.sw{padding-left:1.5rem;padding-right:1.5rem}
+  .hero{padding-bottom:3rem}.sec{padding-top:5.5rem;padding-bottom:5.5rem}
+  .sw{padding-top:5.5rem;padding-bottom:5.5rem}
+  .ab-g{grid-template-columns:1fr;gap:3.5rem}
+  .th-g{grid-template-columns:1fr 1fr;padding:0 1.5rem}
+  .pr{grid-template-columns:3rem 1fr;gap:1.5rem}
+  footer{flex-direction:column;gap:.8rem;text-align:center;padding:1.5rem}
+}
+@media(max-width:480px){.th-g{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<div class="container">
+<div id="cur"></div>
+<canvas id="bh"></canvas>
+<div id="ct">
 
-  <nav>
-    <div class="nav-logo">naman.supekar</div>
-    <ul class="nav-links">
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#background">Background</a></li>
-    </ul>
-  </nav>
+<nav id="nav">
+  <span class="nav-id">NC / 2026</span>
+  <ul class="nav-r">
+    <li><a href="#work">Work</a></li>
+    <li><a href="#thinking">Thinking</a></li>
+    <li><a href="#writing">Writing</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
 
-  <section class="hero">
-    <div class="hero-label">Builder — Delhi, India</div>
-    <h1>Product builder.<br><em>No engineering degree.</em><br>Ships anyway.</h1>
-    <p class="hero-bio">
-      Final-year BBA student (Finance & Data Analytics). I build at the intersection of AI and product — mostly alone, mostly with tools that didn't exist two years ago. Three products in various stages. One live. One designed end-to-end. One researched deeply enough to know whether to build it.
-    </p>
-    <div class="hero-links">
-      <a href="https://tryknot.netlify.app/" target="_blank" class="btn btn-primary">→ See Knot Live</a>
-      <a href="https://x.com/nmnsup" target="_blank" class="btn btn-ghost">X / @nmnsup</a>
-    </div>
-    <div class="stats">
-      <div class="stat">
-        <div class="stat-number">3<span>×</span></div>
-        <div class="stat-label">Products Built or Designed</div>
-      </div>
-      <div class="stat">
-        <div class="stat-number">29<span>+</span></div>
-        <div class="stat-label">Waitlist Signups — Knot</div>
-      </div>
-      <div class="stat">
-        <div class="stat-number">0<span>→</span></div>
-        <div class="stat-label">Prior Engineering Background</div>
-      </div>
-    </div>
-  </section>
+<section class="hero">
+  <h1 class="h-name">Naman Chhabbra   </h1>
+  <p class="h-sub">Builder &nbsp;·&nbsp; Thinker &nbsp;·&nbsp; 21 &nbsp;·&nbsp; Delhi &nbsp;·&nbsp; No CS degree. Ships anyway.</p>
+</section>
 
-  <section class="section" id="projects">
-    <div class="section-header">
-      <span class="section-label">01 /</span>
-      <h2>Projects</h2>
-    </div>
+<div class="bh-z">
+  <p class="bh-q" id="bhq">
+    I exist at the boundary between<br>
+    building things and asking<br>
+    why things exist.
+  </p>
+</div>
 
-    <div class="projects">
-
-      <div class="project-card card-knot">
-        <div class="card-top">
-          <div class="card-meta">
-            <div class="card-index">Project 01</div>
-            <div class="card-title">Knot</div>
-            <div class="card-subtitle">AI Second Brain — Browser Extension</div>
-          </div>
-          <span class="card-status status-live">● Live</span>
-        </div>
-        <p class="card-body">
-          Most people lose half of what they read online. Knot fixes that. It's a browser extension that captures ideas, articles, and thoughts as you browse — then surfaces them later using AI, so the thing you read three weeks ago actually informs what you're thinking today. Built entirely with AI tools, no engineering background. Has a live landing page, a real waitlist, a Substack article, and an X thread documenting the build in public.
-        </p>
-        <div class="card-tags">
-          <span class="tag">Browser Extension</span>
-          <span class="tag">AI / LLM</span>
-          <span class="tag">Personal Knowledge</span>
-          <span class="tag">Vibe-coded</span>
-          <span class="tag">Solo Build</span>
-        </div>
-        <div class="card-highlights">
-          <div class="highlight">
-            <div class="highlight-dot dot-accent"></div>
-            <div class="highlight-text"><strong>Live landing page</strong> with Formspree waitlist at tryknot.netlify.app</div>
-          </div>
-          <div class="highlight">
-            <div class="highlight-dot dot-accent"></div>
-            <div class="highlight-text"><strong>29+ real waitlist signups</strong> from organic discovery</div>
-          </div>
-          <div class="highlight">
-            <div class="highlight-dot dot-accent"></div>
-            <div class="highlight-text"><strong>Full competitive analysis</strong> across 8+ second-brain tools</div>
-          </div>
-          <div class="highlight">
-            <div class="highlight-dot dot-accent"></div>
-            <div class="highlight-text"><strong>User research</strong> — Reddit outreach and interview synthesis</div>
-          </div>
-          <div class="highlight">
-            <div class="highlight-dot dot-accent"></div>
-            <div class="highlight-text"><strong>Build-in-public</strong> on Substack and @nmnsup on X</div>
-          </div>
-          <div class="highlight">
-            <div class="highlight-dot dot-accent"></div>
-            <div class="highlight-text"><strong>Chrome Web Store</strong> launch in progress</div>
-          </div>
-        </div>
-        <a href="https://tryknot.netlify.app/" target="_blank" class="card-link">
-          Visit tryknot.netlify.app
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 10L10 2M10 2H4M10 2V8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-        </a>
-      </div>
-
-      <div class="project-card card-report">
-        <div class="card-top">
-          <div class="card-meta">
-            <div class="card-index">Project 02</div>
-            <div class="card-title">ReportPilot</div>
-            <div class="card-subtitle">Vertical SaaS — Digital Marketing Agencies</div>
-          </div>
-          <span class="card-status status-concept">◎ Designed</span>
-        </div>
-        <p class="card-body">
-          Digital marketing agencies spend every Friday manually writing client reports — pulling numbers from Google Ads, Meta, and GA4, writing the narrative, formatting it, sending it. Every client. Every week. By hand. Every existing tool shows them the data. None of them write the words. ReportPilot connects to their ad accounts, writes the full report in the agency's own voice — what changed, why, what to do next — and emails it to the client automatically. The agency wakes up Saturday. Their clients already have their reports. Nobody worked Friday evening.
-        </p>
-        <div class="card-tags">
-          <span class="tag">Vertical SaaS</span>
-          <span class="tag">Marketing Tech</span>
-          <span class="tag">LLM Automation</span>
-          <span class="tag">API Integration</span>
-          <span class="tag">B2B</span>
-        </div>
-        <div class="card-highlights">
-          <div class="highlight">
-            <div class="highlight-dot dot-accent2"></div>
-            <div class="highlight-text"><strong>Problem validated</strong> through agency interviews and community research</div>
-          </div>
-          <div class="highlight">
-            <div class="highlight-dot dot-accent2"></div>
-            <div class="highlight-text"><strong>Integrations mapped</strong> — Google Ads, Meta, GA4 APIs</div>
-          </div>
-          <div class="highlight">
-            <div class="highlight-dot dot-accent2"></div>
-            <div class="highlight-text"><strong>Voice matching</strong> — reports generated in the agency's own tone</div>
-          </div>
-          <div class="highlight">
-            <div class="highlight-dot dot-accent2"></div>
-            <div class="highlight-text"><strong>GTM outlined</strong> — agency Slack groups, ProductHunt, cold outreach</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="project-card card-asa">
-        <div class="card-top">
-          <div class="card-meta">
-            <div class="card-index">Project 03</div>
-            <div class="card-title">ASA — Market Research</div>
-            <div class="card-subtitle">AI Observability Startup — Deep Research Sprint</div>
-          </div>
-          <span class="card-status status-research">◈ Research</span>
-        </div>
-        <p class="card-body">
-          ASA (AI System Avatar) is a conversational observability layer for AI agents. Instead of reading dashboards or log files, engineers ask in plain English: "Why did my agent fail last night?" and get a human-readable answer. Before building anything, I ran a structured 9-part research sprint covering problem validation, competitive landscape across 10 tools, market sizing, regulatory implications, customer segmentation, GTM strategy, and a full risk analysis.
-        </p>
-        <div class="card-tags">
-          <span class="tag">AI Infrastructure</span>
-          <span class="tag">LLMOps</span>
-          <span class="tag">Market Research</span>
-          <span class="tag">Startup Strategy</span>
-          <span class="tag">B2B SaaS</span>
-        </div>
-        <div class="card-highlights">
-          <div class="highlight">
-            <div class="highlight-dot dot-accent3"></div>
-            <div class="highlight-text"><strong>10-tool competitive teardown</strong> — LangSmith, Arize, Helicone, Langfuse and more</div>
-          </div>
-          <div class="highlight">
-            <div class="highlight-dot dot-accent3"></div>
-            <div class="highlight-text"><strong>Market sizing</strong> across LLMOps, AIOps, and agentic AI</div>
-          </div>
-          <div class="highlight">
-            <div class="highlight-dot dot-accent3"></div>
-            <div class="highlight-text"><strong>EU AI Act analysis</strong> and regulatory implications for observability</div>
-          </div>
-          <div class="highlight">
-            <div class="highlight-dot dot-accent3"></div>
-            <div class="highlight-text"><strong>Full SWOT</strong> with viability score and reasoning</div>
-          </div>
-          <div class="highlight">
-            <div class="highlight-dot dot-accent3"></div>
-            <div class="highlight-text"><strong>Customer segmentation</strong> and WTP analysis across 4 buyer profiles</div>
-          </div>
-          <div class="highlight">
-            <div class="highlight-dot dot-accent3"></div>
-            <div class="highlight-text"><strong>Moat strategy</strong> — defensibility against OpenAI, Anthropic, NVIDIA</div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <section class="section" id="background">
-    <div class="section-header">
-      <span class="section-label">02 /</span>
-      <h2>Background</h2>
-    </div>
-    <div class="about-grid">
-      <div class="about-block">
-        <div class="about-block-label">Education</div>
-        <p>Final-year BBA — Finance & Data Analytics</p>
-        <p>Institute of Management Studies, Delhi</p>
-        <p style="margin-top: 14px; font-size: 13px; color: #555468;">Non-engineering background. Built everything using AI tools — which is kind of the point.</p>
-      </div>
-      <div class="about-block">
-        <div class="about-block-label">Certifications</div>
-        <ul class="cert-list">
-          <li>AI for Product Management — Pendo x Google cloud</li>
-          <li>AI for Everyone - Andrew NG</li>
-          <li>Anthropic AI Fluency: Frameworks & Foundations</li>
-          <li>Anthropic Claude Code in Action</li>
-          <li>Human Behaviour - NPTEL</li>
-        </ul>
-      </div>
-      <div class="about-block">
-        <div class="about-block-label">What I Can Actually Do</div>
-        <p>Product research and competitive analysis. Writing specs and PRDs. Talking to users. Building landing pages and browser extensions with AI tools. Thinking through GTM from first principles.</p>
-        <p>Not a developer by training. A product person who ships.</p>
-      </div>
-      <div class="about-block">
-        <div class="about-block-label">Other Activity</div>
-        <p>Applied to YC Startup School India (April 2026, Bengaluru). Building in public on X (@nmnsup). Writing on Substack about Knot's product development journey.</p>
+<section class="sec rv" id="about">
+  <p class="sl">Identity</p>
+  <div class="ab-g">
+    <div>
+      <h2 class="ab-h">Most builders don't ask deep questions. Most philosophers don't ship. I'm trying to hold both without collapsing one into the other.</h2>
+      <div class="ab-b">
+        <p>My days: customer discovery in Ludhiana hospitals in the morning, Many Worlds interpretation and Advaita Vedanta in the evening. Product specs before noon. Seneca at midnight. Not performance. Just how my mind actually runs.</p>
+        <p>Graduated BBA Finance & Data Analytics, May 2026. No CS degree. Built three products with AI tools and shipped them. Pursuing APM roles at AI-first startups while building a voice-first prescription tool for private clinic doctors in India — validated in-person at DMC Ludhiana.</p>
+        <p>Six months of runway. Enough time to be reckless in the right ways.</p>
       </div>
     </div>
-  </section>
-
-  <footer id="contact">
-    <div class="footer-note">© 2026 Naman Supekar · Delhi, India</div>
-    <div class="footer-links">
-      <a href="https://tryknot.netlify.app/" target="_blank">Knot</a>
-      <a href="https://x.com/nmnsup" target="_blank">@nmnsup</a>
+    <div>
+      <div class="fact"><div class="fn">3×</div><div class="fl">Products built from scratch<br>Zero prior engineering background</div></div>
+      <div class="fact"><div class="fn">29+</div><div class="fl">Organic waitlist — Knot<br>Zero paid acquisition</div></div>
+      <div class="fact"><div class="fn">9pt</div><div class="fl">Research sprint before ASA<br>Market sizing, GTM, regulatory angle</div></div>
+      <div class="fact"><div class="fn">∞</div><div class="fl">Open questions about consciousness,<br>simulation, and why anything exists</div></div>
     </div>
-  </footer>
+  </div>
+</section>
+
+<section class="sec" id="work">
+  <p class="sl">Work</p>
+  <div class="pr">
+    <div class="pn">01</div>
+    <div>
+      <div class="ps"><span class="dot dl"></span><span style="color:rgba(74,191,224,.8)">Live</span></div>
+      <h3 class="pt">Knot</h3>
+      <p class="pd">AI second brain as a browser extension. Most people lose half of what they read online — Knot captures it and surfaces it with AI when it becomes relevant again. Built solo, no CS background. 29+ organic signups.</p>
+      <a href="https://tryknot.netlify.app/" target="_blank" class="pl">tryknot.netlify.app</a>
+    </div>
+  </div>
+  <div class="pr">
+    <div class="pn">02</div>
+    <div>
+      <div class="ps"><span class="dot db"></span><span style="color:var(--muted)">Designed</span></div>
+      <h3 class="pt">ReportPilot</h3>
+      <p class="pd">Agencies waste every Friday writing client reports by hand. Every existing tool shows data — none write the words. ReportPilot connects to ad accounts, writes the full narrative in the agency's own voice, emails it automatically.</p>
+    </div>
+  </div>
+  <div class="pr">
+    <div class="pn">03</div>
+    <div>
+      <div class="ps"><span class="dot dr"></span><span style="color:var(--muted)">Research Sprint</span></div>
+      <h3 class="pt">ASA</h3>
+      <p class="pd">Conversational observability for AI agents. Engineers ask in plain English why their agent failed. 9-part structured research sprint — competitive teardown, market sizing, EU AI Act compliance — before a single line of code.</p>
+    </div>
+  </div>
+  <div class="pr">
+    <div class="pn">04</div>
+    <div>
+      <div class="ps"><span class="dot dw"></span><span style="color:rgba(232,105,26,.85)">Building now</span></div>
+      <h3 class="pt">RXvoice</h3>
+      <p class="pd">Doctor speaks Hindi, Punjabi, other regional languages. Prescription and clinical notes write themselves. Validated in-person at DMC Ludhiana. ₹499/month, private single-clinic doctors. Zero switching cost. The wedge is real.</p>
+    </div>
+  </div>
+</section>
+
+<section class="sw" id="thinking">
+  <div style="padding:0 3.5rem;max-width:1060px"><p class="sl">Intellectual field</p></div>
+  <div class="th-g">
+    <div class="td"><h3 class="tn">Simulation Theory</h3><p class="tnote">What changes if reality is computational?<br>Where Bostrom meets Vedanta. Information as substrate.</p></div>
+    <div class="td"><h3 class="tn">Advaita Vedanta</h3><p class="tnote">Non-duality. Tat tvam asi. The observer IS<br>the observed. Shankaracharya via Nisargadatta.</p></div>
+    <div class="td"><h3 class="tn">Quantum Mechanics</h3><p class="tnote">Many Worlds. Everett. Decoherence.<br>Measurement problem as consciousness question.</p></div>
+    <div class="td"><h3 class="tn">Consciousness</h3><p class="tnote">Hard problem. IIT. Global Workspace Theory.<br>Why anything feels like something. Tononi vs Chalmers.</p></div>
+    <div class="td"><h3 class="tn">Cosmology</h3><p class="tnote">Block universe. Eternalism. Time as emergent.<br>Entropy as arrow. Penrose cyclic cosmology.</p></div>
+    <div class="td"><h3 class="tn">Stoicism</h3><p class="tnote">Seneca's <em>On the Shortness of Life.</em> Marcus.<br>Epictetus. Praxis over theory. Always.</p></div>
+  </div>
+</section>
+
+<section class="sec" id="writing">
+  <p class="sl">Writing · nmnxr.substack.com</p>
+  <ul style="list-style:none">
+    <li class="wi rv"><a href="https://open.substack.com/pub/nmnxr/p/why-every-second-brain-app-fails?r=6ej3e2&utm_campaign=post-expanded-share&utm_medium=web" target="_blank"><span class="wt">Why every "second brain" app fails (it's not what you think)</span><span class="wa">↗</span></a></li>
+    <li class="wi rv"><a href="https://open.substack.com/pub/nmnxr/p/all-your-futures-exist-youre-just?r=6ej3e2&utm_campaign=post-expanded-share&utm_medium=web" target="_blank"><span class="wt">All Your Futures Exist. You're Just Not There Yet.</span><span class="wa">↗</span></a></li>
+    <li class="wi rv"><a href="https://open.substack.com/pub/nmnxr/p/your-second-brain-is-your-first-problem?r=6ej3e2&utm_campaign=post-expanded-share&utm_medium=web" target="_blank"><span class="wt">Your Second Brain Is Your First Problem</span><span class="wa">↗</span></a></li>
+    <li class="wi rv"><a href="https://open.substack.com/pub/nmnxr/p/what-if-were-not-simulating-the-universe?r=6ej3e2&utm_campaign=post-expanded-share&utm_medium=web" target="_blank"><span class="wt">What If We’re Not Simulating the Universe, Just You?</span><span class="wa">↗</span></a></li>
+    <li class="wi rv"><a href="https://open.substack.com/pub/nmnxr/p/im-21-building-a-memory-app-and-i?r=6ej3e2&utm_campaign=post-expanded-share&utm_medium=web" target="_blank"><span class="wt">I'm 21, building a memory app, and I think I'm weirdly early to something</span><span class="wa">↗</span></a></li>
+  </ul>
+</section>
+
+<section class="contact" id="contact">
+  <p class="cp">Let's think together</p>
+  <h2 class="ch">Say<br>something<br>real.</h2>
+  <p class="cn">APM and Founder's Office at AI-first startups. Co-founder conversations. Ideas at the edge of philosophy and product. I reply to messages with actual substance.</p>
+  <a href="mailto:tryknot@gmail.com" class="ce">tryknot@gmail.com</a>
+  <ul class="cs">
+    <li><a href="https://x.com/nmnsup " target="_blank">X / Twitter</a></li>
+    <li><a href="https://www.linkedin.com/in/nmnsup/" target="_blank">LinkedIn</a></li>
+    <li><a href="https://nmnxr.substack.com" target="_blank">Substack</a></li>
+    <li><a href="https://nmnsup.github.io/portfolio/" target="_blank">GitHub</a></li>
+  </ul>
+</section>
+
+<footer>
+  <span class="fll">Delhi, India. 2026. BBA + no CS degree. Ships anyway.</span>
+  <span class="frr">Tat tvam asi.</span>
+</footer>
 
 </div>
+
+<script>
+const cur=document.getElementById('cur');
+document.addEventListener('mousemove',e=>{cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px'});
+document.getElementById('nav') && window.addEventListener('scroll',()=>{document.getElementById('nav').classList.toggle('scrolled',scrollY>50)},{passive:true});
+
+const canvas=document.getElementById('bh'),ctx=canvas.getContext('2d');
+let CW,CH,mouseX=innerWidth*.5,mouseY=innerHeight*.5,scrollFade=1;
+const off=document.createElement('canvas'),sctx=off.getContext('2d');
+
+function init(){
+  const d=Math.min(devicePixelRatio||1,2)*.65;
+  CW=Math.round(innerWidth*d);CH=Math.round(innerHeight*d);
+  canvas.width=CW;canvas.height=CH;off.width=CW;off.height=CH;
+  sctx.fillStyle='#000';sctx.fillRect(0,0,CW,CH);
+  const n=Math.floor(CW*CH/2800);
+  for(let i=0;i<n;i++){
+    const x=Math.random()*CW,y=Math.random()*CH,r=Math.random()*.75+.1,a=Math.random()*.45+.08;
+    sctx.beginPath();sctx.arc(x,y,r,0,Math.PI*2);
+    sctx.fillStyle=`rgba(240,238,228,${a})`;sctx.fill();
+  }
+}
+init();
+window.addEventListener('resize',init,{passive:true});
+document.addEventListener('mousemove',e=>{mouseX=e.clientX;mouseY=e.clientY},{passive:true});
+
+window.addEventListener('scroll',()=>{
+  const vh=innerHeight,sy=scrollY;
+  scrollFade=Math.max(0,1-Math.max(0,sy-vh*.9)/(vh*1.1));
+  const q=document.getElementById('bhq');
+  if(q.getBoundingClientRect().top<vh*.82)q.classList.add('in');
+  document.querySelectorAll('.rv,.pr,.td').forEach(el=>{
+    if(el.getBoundingClientRect().top<vh*.9)el.classList.add('in');
+  });
+},{passive:true});
+
+function draw(t){
+  if(!CW||!CH)return;
+  const sc=Math.min(CW,CH);
+  const mpx=(mouseX/innerWidth-.5)*sc*.038,mpy=(mouseY/innerHeight-.5)*sc*.038;
+  const cx=CW*.5+mpx,cy=CH*.5+mpy;
+  const sR=sc*.068,phR=sR*1.1,dIn=sR*1.2,dOut=sR*5.4,TLT=.36;
+  const rot=t*.052;
+
+  ctx.drawImage(off,0,0);
+  ctx.save();
+  ctx.globalAlpha=scrollFade;
+
+  // outer glow
+  const ag=ctx.createRadialGradient(cx,cy,dOut*.3,cx,cy,dOut*2.6);
+  ag.addColorStop(0,'rgba(200,75,10,0.055)');ag.addColorStop(.55,'rgba(140,45,5,0.02)');ag.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=ag;ctx.fillRect(0,0,CW,CH);
+
+  // accretion disk
+  ctx.save();ctx.translate(cx,cy);ctx.scale(1,TLT);
+  const NR=26,NS=52;
+  for(let ri=NR-1;ri>=0;ri--){
+    const frac=ri/(NR-1),radius=dIn+(dOut-dIn)*frac,arcW=(dOut-dIn)/NR*1.55;
+    const temp=1-Math.pow(frac,.55)*.86;
+    let R,G,B;
+    if(temp>.80){const f=(temp-.80)/.20;R=255;G=Math.round(225+30*f);B=Math.round(155+95*f);}
+    else if(temp>.46){const f=(temp-.46)/.34;R=255;G=Math.round(95+130*f);B=Math.round(12+143*f);}
+    else{const f=temp/.46;R=Math.round(155+100*f);G=Math.round(18+77*f);B=4;}
+    for(let si=0;si<NS;si++){
+      const a1=(si/NS)*Math.PI*2+rot,a2=a1+Math.PI*2/NS,am=(a1+a2)*.5;
+      const dRaw=Math.cos(am+Math.PI*.55),dFac=.07+3.4*Math.pow(Math.max(0,dRaw),2);
+      const alpha=Math.min((.055+.095*temp)*(1-frac*.22)*dFac,.97);
+      ctx.beginPath();ctx.arc(0,0,radius,a1,a2);
+      ctx.lineWidth=arcW;ctx.strokeStyle=`rgba(${R},${G},${B},${alpha})`;ctx.stroke();
+    }
+  }
+  ctx.restore();
+
+  // polar jets
+  [-1,1].forEach(sign=>{
+    const jg=ctx.createLinearGradient(cx,cy+sign*sR*1.6,cx,cy+sign*sc*.42);
+    jg.addColorStop(0,'rgba(80,165,255,0.10)');jg.addColorStop(.5,'rgba(50,120,220,0.04)');jg.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=jg;ctx.fillRect(cx-sR*.35,cy+sign*sR*1.6,sR*.7,sign*(sc*.42-sR*1.6));
+  });
+
+  // shadow
+  ctx.save();ctx.translate(cx,cy);
+  const sg=ctx.createRadialGradient(0,0,0,0,0,sR*1.28);
+  sg.addColorStop(0,'rgba(0,0,0,1)');sg.addColorStop(.83,'rgba(0,0,0,1)');sg.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=sg;ctx.beginPath();ctx.arc(0,0,sR*1.28,0,Math.PI*2);ctx.fill();ctx.restore();
+
+  // photon ring
+  ctx.save();ctx.translate(cx,cy);ctx.scale(1,TLT*.58);
+  ctx.beginPath();ctx.arc(0,0,phR,0,Math.PI*2);ctx.lineWidth=9;ctx.strokeStyle='rgba(255,215,130,0.15)';ctx.stroke();
+  ctx.beginPath();ctx.arc(0,0,phR,0,Math.PI*2);ctx.lineWidth=1.6;ctx.strokeStyle='rgba(255,248,210,0.94)';ctx.stroke();
+  ctx.restore();
+
+  // lensing glow
+  ctx.save();ctx.translate(cx,cy);
+  const lg=ctx.createRadialGradient(0,0,sR*.85,0,0,sR*1.95);
+  lg.addColorStop(0,'rgba(0,0,0,0)');lg.addColorStop(.52,'rgba(0,0,0,0)');lg.addColorStop(.80,'rgba(255,140,35,0.065)');lg.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=lg;ctx.beginPath();ctx.arc(0,0,sR*1.95,0,Math.PI*2);ctx.fill();ctx.restore();
+
+  ctx.restore();
+}
+
+let last=0;
+(function loop(ts){
+  requestAnimationFrame(loop);
+  if(ts-last<1000/30)return;
+  last=ts;draw(ts*.001);
+})(0);
+
+setTimeout(()=>window.dispatchEvent(new Event('scroll')),120);
+</script>
 </body>
 </html>
