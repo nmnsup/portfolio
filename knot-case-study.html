@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Knot — Paused · Case Study</title>
+  <style>
+    /* ─── tokens — kami dark ──────────────────────────────────────────── */
+    :root {
+      /* surface — kami dark palette */
+      --bg:      #141413;
+      --surface: #30302e;
+      --fg:      #faf9f5;
+      --muted:   #8a8882;
+      --border:  #3d3d3a;
+      --accent:  #2d5a8a;
+
+      --accent-soft: rgba(45, 90, 138, 0.18);
+      --fg-soft:     rgba(250, 249, 245, 0.06);
+
+      /* typography — kami stacks */
+      --font-display: Charter, Georgia, Palatino, "Times New Roman", serif;
+      --font-body:    -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      --font-mono:    "JetBrains Mono", "SF Mono", "Fira Code", Consolas, Monaco, monospace;
+
+      /* kami type scale */
+      --text-xs: 11px;
+      --text-sm: 12px;
+      --text-base: 14px;
+      --text-md: 15px;
+      --text-lg: 17px;
+      --text-xl: 22px;
+      --text-2xl: 32px;
+      --text-3xl: 48px;
+
+      /* kami leading */
+      --leading-display: 1.1;
+      --leading-tight: 1.25;
+      --leading-body: 1.55;
+      --leading-dense: 1.4;
+
+      /* kami tracking */
+      --tracking-display: -1.2px;
+      --tracking-eyebrow: 1.2px;
+      --tracking-label: 0.4px;
+
+      /* kami spacing */
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 20px;
+      --space-6: 24px;
+      --space-7: 28px;
+      --space-8: 32px;
+      --space-12: 48px;
+      --space-18: 72px;
+      --space-22: 88px;
+
+      /* kami radius */
+      --radius-xs: 2px;
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-xl: 16px;
+
+      /* kami layout */
+      --container-max: 1120px;
+      --gutter: 64px;
+
+      /* section rhythm */
+      --section-y: 72px;
+    }
+
+    /* ─── reset & base ──────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      line-height: var(--leading-body);
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+    img, svg { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; }
+    p { text-wrap: pretty; }
+    h1, h2, h3, h4 { text-wrap: balance; }
+
+    /* ─── layout primitives ─────────────────────────────────────────── */
+    .container {
+      max-width: var(--container-max);
+      margin-inline: auto;
+      padding-inline: var(--gutter);
+    }
+    .section { padding-block: var(--section-y); }
+    .section + .section { border-top: 1px solid var(--border); }
+    .stack { display: flex; flex-direction: column; }
+    .stack > * + * { margin-top: var(--space-4); }
+    .row { display: flex; align-items: center; gap: var(--space-4); }
+    .row-between { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-8); }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-8); }
+    @media (max-width: 920px) {
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      :root { --gutter: 32px; --section-y: 48px; }
+    }
+
+    /* ─── type ──────────────────────────────────────────────────────── */
+    h1 { font-family: var(--font-display); font-size: var(--text-3xl); line-height: var(--leading-display); letter-spacing: var(--tracking-display); margin: 0; font-weight: 500; }
+    h2 { font-family: var(--font-display); font-size: var(--text-2xl); line-height: var(--leading-tight); letter-spacing: -0.5px; margin: 0; font-weight: 500; }
+    h3 { font-size: var(--text-lg); font-weight: 600; line-height: 1.3; margin: 0; }
+    .lead { font-size: var(--text-md); line-height: var(--leading-body); color: var(--muted); max-width: 60ch; margin: 0; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: var(--text-sm);
+      letter-spacing: var(--tracking-eyebrow);
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: 0 0 var(--space-4);
+    }
+    .meta { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--muted); }
+    .num  { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+    /* kami section number */
+    .section-num {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--accent);
+      letter-spacing: var(--tracking-label);
+      margin: 0 0 var(--space-2);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ─── status bar ────────────────────────────────────────────────── */
+    .status-bar {
+      background: var(--accent-soft);
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+      padding: var(--space-3) var(--gutter);
+      font-family: var(--font-mono);
+      font-size: var(--text-sm);
+      letter-spacing: 0.04em;
+      color: var(--accent);
+    }
+
+    /* ─── chrome: nav + footer ──────────────────────────────────────── */
+    .topnav {
+      position: sticky; top: 0; z-index: 10;
+      background: color-mix(in srgb, var(--bg) 92%, transparent);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .topnav-inner { display: flex; align-items: center; justify-content: space-between; padding-block: 14px; }
+    .topnav .logo { font-family: var(--font-display); font-size: 19px; font-weight: 500; letter-spacing: -0.01em; }
+    .topnav nav { display: flex; gap: var(--space-8); }
+    .topnav nav a { font-size: var(--text-base); color: var(--muted); }
+    .topnav nav a:hover { color: var(--fg); }
+    .pagefoot { padding-block: var(--space-8); color: var(--muted); font-size: var(--text-xs); border-top: 1px solid var(--border); }
+    .pagefoot .row-between { flex-wrap: wrap; gap: var(--space-4); }
+
+    /* ─── buttons ───────────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex; align-items: center; gap: var(--space-2);
+      padding: var(--space-2) 14px;
+      border-radius: var(--radius-md);
+      border: 1px solid transparent;
+      font-size: var(--text-sm);
+      font-weight: 500;
+      letter-spacing: var(--tracking-label);
+      transition: box-shadow 0.2s ease, background 0.15s ease;
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn-primary {
+      background: var(--accent);
+      color: var(--fg);
+      box-shadow: 0 0 0 1px var(--accent);
+    }
+    .btn-primary:hover { background: var(--accent); }
+    .btn-ghost { background: transparent; color: var(--fg); padding-inline: var(--space-2); }
+    .btn-ghost:hover { color: var(--accent); }
+    .btn-arrow::after { content: '→'; transition: transform 0.15s ease; }
+    .btn-arrow:hover::after { transform: translateX(2px); }
+
+    /* ─── table ─────────────────────────────────────────────────────── */
+    .ds-table { width: 100%; border-collapse: collapse; font-size: var(--text-base); }
+    .ds-table th, .ds-table td { padding: var(--space-4) var(--space-5); text-align: left; border-bottom: 1px solid var(--border); }
+    .ds-table th {
+      color: var(--muted);
+      font-weight: 500;
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .ds-table tbody tr:hover { background: var(--fg-soft); }
+    .ds-table .num-col { font-family: var(--font-mono); font-variant-numeric: tabular-nums; text-align: right; }
+    .ds-table .highlight { background: var(--accent-soft); }
+    .ds-table .highlight:hover { background: color-mix(in srgb, var(--accent) 26%, transparent); }
+    .ds-table .best-tag {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-soft);
+      padding: 2px 6px;
+      border-radius: var(--radius-xs);
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+
+    /* ─── hero — left-aligned, dense ────────────────────────────────── */
+    .hero { padding-block: var(--space-12) 0; }
+    .hero h1 { margin-bottom: var(--space-5); }
+    .hero .lead { margin-bottom: 0; }
+
+    /* ─── why-paused — emotional treatment ──────────────────────────── */
+    .paused-text {
+      color: var(--fg);
+      font-size: var(--text-md);
+      line-height: 1.7;
+      max-width: 56ch;
+    }
+    .paused-text p { margin: 0; }
+    .paused-text p + p { margin-top: var(--space-5); }
+
+    /* ─── cta strip ─────────────────────────────────────────────────── */
+    .cta-strip { text-align: center; }
+    .cta-strip .container { max-width: 600px; }
+    .cta-strip h2 { margin-bottom: var(--space-4); }
+    .cta-strip .lead { margin: 0 auto var(--space-8); }
+
+    /* ─── problem cards ─────────────────────────────────────────────── */
+    .problem-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+      height: 100%;
+    }
+    .problem-card .eyebrow-mini {
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: 0 0 var(--space-2);
+    }
+    .problem-card h3 { margin-bottom: var(--space-3); }
+    .problem-card p { color: var(--muted); margin: 0; font-size: var(--text-base); line-height: var(--leading-body); }
+    .problem-card code {
+      font-family: var(--font-mono);
+      font-size: 0.9em;
+      background: var(--fg-soft);
+      padding: 1px 5px;
+      border-radius: var(--radius-xs);
+    }
+
+    /* ─── table label ───────────────────────────────────────────────── */
+    .table-label {
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 0 0 var(--space-6);
+    }
+  </style>
+</head>
+<body>
+  <div class="status-bar" data-od-id="status-bar">
+    Paused — see retro below
+  </div>
+
+  <header class="topnav" data-od-id="topnav">
+    <div class="container topnav-inner">
+      <span class="logo">Knot</span>
+      <nav>
+        <a href="https://tryknot.netlify.app/" target="_blank" rel="noopener">Original site</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="content">
+    <section class="section hero" data-od-id="hero">
+      <div class="container">
+        <p class="eyebrow">PAUSED · CASE STUDY</p>
+        <h1>Knot turned X bookmarks into a searchable second brain.</h1>
+        <p class="lead">An AI browser extension that saved bookmarks with zero manual effort and made them instantly searchable. Tested across four channels over two weeks. Paused when retention didn't materialize.</p>
+      </div>
+    </section>
+
+    <section class="section" data-od-id="what-built">
+      <div class="container">
+        <p class="section-num">01</p>
+        <h2>What actually shipped</h2>
+        <p class="lead" style="margin-top: var(--space-3); margin-bottom: var(--space-8);">
+          A Chrome MV3 extension — background service worker, content script, and popup — backed by Supabase for auth and storage and Groq's Llama-3.3-70B for categorization, plus a separately hosted web dashboard. The channel test below ran on top of a product that worked end-to-end, not a clickable prototype.
+        </p>
+
+        <div class="grid-3">
+          <div class="problem-card">
+            <p class="eyebrow-mini">Problem 1</p>
+            <h3>X's bookmark list is virtualized</h3>
+            <p>Only ~4–6 tweets ever exist in the DOM at once — older ones get removed as new ones scroll in. A scraper that counts DOM nodes to detect new content sees the same count forever and gives up immediately. Fixed by accumulating tweet URLs into a persistent map across scroll cycles, stopping only after several consecutive scrolls return zero new URLs. Import went from <span class="num">0</span> bookmarks recovered to <span class="num">93</span> on the same account.</p>
+          </div>
+          <div class="problem-card">
+            <p class="eyebrow-mini">Problem 2</p>
+            <h3>Auth has to survive a worker that keeps dying</h3>
+            <p>MV3 service workers get killed and restarted constantly, so session state can't live in memory. Access token, refresh token, and expiry persist to <code>chrome.storage.local</code>, and every authenticated call checks freshness first and silently refreshes before the request fires. Login also triggers an automatic bookmark import — zero clicks between the OAuth callback and a populated dashboard.</p>
+          </div>
+          <div class="problem-card">
+            <p class="eyebrow-mini">Problem 3</p>
+            <h3>Author attribution has no single reliable selector</h3>
+            <p>X renders author info differently depending on where in the tree you look — sometimes a labeled name block, sometimes a bare anchor tag. One selector alone silently dropped authors on a chunk of tweets. Fixed with a cascading fallback: labeled block → @-prefixed span scan → profile-link parsing.</p>
+          </div>
+        </div>
+
+        <div class="problem-card" style="margin-top: var(--space-6);">
+          <p class="eyebrow-mini">Known limitation — not hidden</p>
+          <p>Categorization calls Groq once per tweet during bulk import. Past roughly 50 tweets in a single import, parallel requests get rate-limited and silently fall back to "Other." The fix — sequential calls with a short delay — was next on the list when the project paused.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" data-od-id="results">
+      <div class="container">
+        <p class="section-num">02</p>
+        <p class="table-label">Channel results</p>
+        <table class="ds-table">
+          <thead>
+            <tr>
+              <th>Channel</th>
+              <th class="num-col">Views</th>
+              <th class="num-col">Engagement</th>
+              <th class="num-col">Notable</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Product Hunt directory</td>
+              <td class="num-col">20</td>
+              <td class="num-col">1 upvote · 0 comments</td>
+              <td class="num-col">Dead</td>
+            </tr>
+            <tr>
+              <td>X (18 posts, 3 weeks)</td>
+              <td class="num-col">~790</td>
+              <td class="num-col">~11 likes</td>
+              <td class="num-col">Mostly own thread replying to itself</td>
+            </tr>
+            <tr>
+              <td>Substack (2 posts)</td>
+              <td class="num-col">139</td>
+              <td class="num-col">5 subscribers</td>
+              <td class="num-col">—</td>
+            </tr>
+            <tr class="highlight">
+              <td>Reddit (2 posts) <span class="best-tag">best</span></td>
+              <td class="num-col">1,083</td>
+              <td class="num-col">2 upvotes · 1 comment</td>
+              <td class="num-col">2 unprompted beta-test DMs</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="lead" style="margin-top: var(--space-6); max-width: 56ch;">
+          Cold-directory launch (Product Hunt) underperformed community-native launch (Reddit) by a wide margin despite similar effort. Reddit delivered 54&times; more views than Product Hunt and the only unprompted beta-test requests — out of roughly 2,000 total views across all four channels.
+        </p>
+      </div>
+    </section>
+
+    <section class="section" data-od-id="why-paused">
+      <div class="container" style="max-width: 720px;">
+        <p class="section-num">03</p>
+        <h2>The loop worked. The retention didn't.</h2>
+        <div class="paused-text" style="margin-top: var(--space-7);">
+          <p>The capture-and-categorize loop worked — bookmarks saved and auto-organized with zero manual effort. What was missing was a retention layer: a reason to open Knot on day 30, not just day 1. Cross-channel testing showed weak organic pull outside personal network. Rather than build a retention system on unvalidated demand, paused Knot and moved on.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section cta-strip" data-od-id="cta-strip">
+      <div class="container">
+        <h2>Read the full build breakdown</h2>
+        <p class="lead">A retro post with the complete channel-by-channel breakdown, the reasoning behind the pause, and what I'd do differently next time.</p>
+        <a href="https://open.substack.com/pub/nmnxr/p/why-i-paused-knot?r=6ej3e2&utm_campaign=post&utm_medium=web" target="_blank" rel="noopener" class="btn btn-primary">Read the full story →</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="pagefoot" data-od-id="footer">
+    <div class="container row-between">
+      <span>Knot · Paused</span>
+      <span class="meta">Built by someone who had 2,000 saved posts and remembered none of them.</span>
+    </div>
+  </footer>
+</body>
+</html>
